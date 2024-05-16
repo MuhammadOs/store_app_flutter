@@ -2,27 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:store_app/UI/custom_widgets/custom_button.dart';
 import 'package:store_app/UI/custom_widgets/custom_text_field.dart';
-import 'package:store_app/UI/home_page_screen.dart';
 import 'package:store_app/models/product_model.dart';
-import 'package:store_app/services/update_product_service.dart';
+import 'package:store_app/services/add_product_service.dart';
 
-class UpdateProductScreen extends StatefulWidget {
-  UpdateProductScreen({super.key});
+import 'home_page_screen.dart';
 
-  static String id = 'update_product';
+class AddProductScreen extends StatefulWidget {
+  AddProductScreen({super.key});
+
+  static String id = 'add_product';
 
   @override
-  State<UpdateProductScreen> createState() => _UpdateProductScreenState();
+  State<AddProductScreen> createState() => _UpdateProductScreenState();
 }
 
-class _UpdateProductScreenState extends State<UpdateProductScreen> {
+class _UpdateProductScreenState extends State<AddProductScreen> {
   String? productName, desc, image, price;
   bool isLoading = false;
+  ProductModel? product;
 
   @override
   Widget build(BuildContext context) {
-    ProductModel product =
-        ModalRoute.of(context)!.settings.arguments as ProductModel;
     return ModalProgressHUD(
       inAsyncCall: isLoading,
       child: Scaffold(
@@ -31,12 +31,12 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_ios_sharp,
                 color: Colors.black,
               )),
-          title: Text(
-            "Update Product",
+          title: const Text(
+            "Add Product",
             style: TextStyle(color: Colors.black),
           ),
           backgroundColor: Colors.transparent,
@@ -46,7 +46,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 150,
               ),
               Padding(
@@ -55,7 +55,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                   onChanged: (data) {
                     productName = data;
                   },
-                  hintText: product.title,
+                  hintText: 'Product Name',
                 ),
               ),
               Padding(
@@ -64,7 +64,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                   onChanged: (data) {
                     desc = data;
                   },
-                  hintText: product.description,
+                  hintText: 'Product Description',
                 ),
               ),
               Padding(
@@ -74,7 +74,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                   onChanged: (data) {
                     price = data;
                   },
-                  hintText: product.price.toString(),
+                  hintText: 'Product Price',
                 ),
               ),
               Padding(
@@ -83,7 +83,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                   onChanged: (data) {
                     image = data;
                   },
-                  hintText: product.image,
+                  hintText: 'Product Image',
                 ),
               ),
               const SizedBox(
@@ -92,16 +92,18 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: CustomButon(
-                  text: "Update",
+                  text: "Add product",
                   onTap: () async {
                     isLoading = true;
+                    setState(() {});
                     try {
-                      await updateProduct(product);
-                      print("Product updated successfully");
+                      await addProduct(product!);
+                      print("Product added successfully");
                     } catch (e) {
                       print(e.toString());
                     }
                     isLoading = false;
+                    setState(() {});
                     Navigator.pushNamed(context, HomePage.id);
                   },
                 ),
@@ -113,9 +115,8 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
     );
   }
 
-  Future<void> updateProduct(ProductModel product) async {
-    await UpdateProductService().updateProduct(
-        id: product.id,
+  Future<void> addProduct(ProductModel product) async {
+    await AddProductService().addProduct(
         title: productName == null ? product.title : productName!,
         price: price == null ? product.price.toString() : price!,
         desc: desc == null ? product.description : desc!,

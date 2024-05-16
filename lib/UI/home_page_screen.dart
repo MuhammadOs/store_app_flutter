@@ -1,6 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:store_app/UI/add_product_screen.dart';
+import 'package:store_app/UI/cart_screen.dart';
 import 'package:store_app/UI/custom_widgets/custom_card.dart';
+import 'package:store_app/models/basket_products.dart';
 import 'package:store_app/models/product_model.dart';
 import 'package:store_app/services/get_all_products_service.dart';
 
@@ -12,17 +16,24 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
         centerTitle: true,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, AddProductScreen.id);
+            },
+            icon: const Icon(Icons.add_box)),
         title: const Text(
-          'New Trend',
+          'E-Commerce App',
           style: TextStyle(color: Colors.black),
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, CartScreen.id);
+            },
             icon: const Icon(
               FontAwesomeIcons.cartShopping,
               color: Colors.black,

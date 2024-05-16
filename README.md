@@ -1,6 +1,6 @@
 # store_app
 
-A new Flutter project.
+E-commerce Fashion Flutter app using the MVC (Model-View-Controller) design architecture with restful APIs (get-post-put) http.
 
 ## Getting Started
 
